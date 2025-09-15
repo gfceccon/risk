@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "risk"
+version = "0.1.0"
+description = "AI agent designed to play the board game Risk"
+authors = ["Gustavo Ceccon <gustavofceccon@gmail.com>"]
+license = "CC0-1.0 license"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "~3.12"
+keras = "^3.11.3"
+matplotlib = "^3.10.6"
+seaborn = "^0.13.2"
+scikit-learn = "^1.7.2"
+pytest = "^8.4.2"
+numpy = "^2.3.3"
+scipy = "^1.16.2"
+pandas = "^2.3.2"
+absl-py = "^2.3.1"
+ml-dtypes = "^0.5.3"
+tensorflow = {extras = ["and-cuda"], version = "^2.20.0"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
