@@ -209,3 +209,9 @@ __marimo__/
 
 # Documentation
 docs/
+risk/base/action.py
+risk/base/evaluate.py
+risk/base/game.py
+risk/base/observation.py
+risk/base/player.py
+risk/base/state.py
