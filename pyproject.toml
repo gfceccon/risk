@@ -18,6 +18,12 @@ scipy = "^1.16.2"
 pandas = "^2.3.2"
 ml-dtypes = "^0.5.3"
 tensorflow = {extras = ["and-cuda"], version = "^2.20.0"}
+pytest-cov = "^7.0.0"
+taskipy = "^1.14.1"
+
+[tool.taskipy.tasks]
+test = "pytest --cov=risk -v"
+post_test = "coverage html"
 
 
 [build-system]
