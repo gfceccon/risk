@@ -1,6 +1,6 @@
 from typing import List
-from risk.game.base.territory_base import BorderBase, TerritoryBase
-from risk.game.map.border import Border
+from risk.base.territory_base import TerritoryBase
+from risk.map.border import Border
 
 
 class Territory(TerritoryBase):

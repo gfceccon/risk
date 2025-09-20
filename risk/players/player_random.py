@@ -1,5 +1,7 @@
+
 from typing import List
-from risk.game.base.player_base import PlayerBase
+from risk.base.player_base import PlayerBase
+
 
 class PlayerRandom(PlayerBase):
     def __init__(self, name: str, id: int):

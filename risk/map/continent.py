@@ -1,6 +1,6 @@
 from typing import List
-from risk.game.base.continent_base import ContinentBase
-from risk.game.base.territory_base import TerritoryBase
+from risk.base.continent_base import ContinentBase
+from risk.base.territory_base import TerritoryBase
 
 
 class Continent(ContinentBase):

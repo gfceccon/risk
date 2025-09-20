@@ -1,5 +1,5 @@
 
-from risk.game.base.territory_base import BorderBase, TerritoryBase
+from risk.base.territory_base import BorderBase, TerritoryBase
 
 
 class Border(BorderBase):

@@ -1,23 +1,23 @@
 from abc import ABC
 from typing import List
 
-from risk.game.base.config import Config, default_config
-from risk.game.base.territory_base import TerritoryBase
+from risk.base.territory_base import TerritoryBase
 
 
 class ContinentBase(ABC):
     name: str
     territories: List[TerritoryBase]
-    config: Config
 
-    def __init__(self, name: str, territories: List[TerritoryBase], config: Config = default_config):
+    def __init__(self, name: str, territories: List[TerritoryBase], bonus: int = 0):
         self.name = name
         self.territories = territories
-        self.config = config
 
     def reset(self) -> None:
         for territory in self.territories:
             territory.reset()
+
+    def add_territories(self, territories: List[TerritoryBase]) -> None:
+        self.territories.extend(territories)
 
     def get_territory_by_name(self, name: str) -> TerritoryBase | None:
         filtered_territories = filter(

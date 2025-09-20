@@ -1,5 +1,3 @@
-
-from risk.game.base.player_base import PlayerBase
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -9,7 +7,7 @@ class TerritoryBase(ABC):
     id: int
     borders: List['BorderBase']
     num_units: int
-    owner: PlayerBase | None
+    owner: int | None
 
     def __init__(self, name: str, id: int):
         self.id = id
