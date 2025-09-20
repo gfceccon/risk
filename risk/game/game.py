@@ -1,49 +1,40 @@
 from typing import List, Sequence, Tuple
-from risk.game.map.map import Map
+from risk.game.base.map_base import MapBase
+from risk.game.base.config import Config, default_config
 from risk.metrics.metrics import Metrics
-from risk.game.base.game_base import PlayerAbstract
+from risk.game.base.game_base import PlayerBase
 from risk.game.state import State
 
 
 class Game:
     state: State
     metrics: Metrics
-    num_troops_start: int
+    num_troops: int
 
-    def __init__(self, players: List[PlayerAbstract], game_map: Map):
+    def __init__(self, players: List[PlayerBase], game_map: MapBase, config: Config = default_config):
+        self.config = config
         self.state = State(players, game_map)
         self.metrics = Metrics()
         self.reset()
 
     def get_troops(self) -> int:
-        num_players = len(self.state.players)
-        if num_players == 3:
-            return 35
-        elif num_players == 4:
-            return 30
-        elif num_players == 5:
-            return 25
-        elif num_players == 6:
-            return 20
-        else:
-            raise ValueError("Number of players must be between 3 and 6.")
+        return self.config.INITIAL_TROOPS.get(len(self.state.players), 0)
 
     def reset(self):
-        self.state.reset(self.get_troops())
+        self.num_troops = self.get_troops()
+        self.state.reset()
         for player in self.state.players:
-            player.reset(self.state)
-
-    def step(self) -> State:
-        player = self.state.player_turn
-        action = player.step(self.state)
-        self.state.apply_action(action)
-        self.state = self.state.next_state()
-
-        return self.state
+            player.reset()
 
     def add_metrics(self, name: str, value: float | str | object) -> None:
         self.metrics.add(name, value)
 
     def play(self) -> None:
         while not self.state.is_terminal():
-            self.step()
+            player = self.state.player_turn
+            legal_actions = self.state.legal_actions()
+            action = player.pick(legal_actions)
+            for agent in self.state.players:
+                agent.step(player, action)
+            self.state.apply_action(action)
+            self.state = self.state.next_state()

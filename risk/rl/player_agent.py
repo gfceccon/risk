@@ -1,12 +1,12 @@
-from risk.game.base.game_base import PlayerAbstract
-from risk.rl.model import RiskFunction, RiskModel
+from risk.game.base.game_base import PlayerBase
+from risk.rl.model import RiskModel
 
 # TODO: Implement Reinforcement Learning Agent
 
 
-class PlayerRL(PlayerAbstract):
+class PlayerRL(PlayerBase):
     model: RiskModel
 
-    def __init__(self, name, model: RiskModel):
-        super().__init__(name, RiskFunction(model))
+    def __init__(self, name: str, id: int, model: RiskModel):
+        super().__init__(name, id)
         self.model = model

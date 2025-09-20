@@ -7,7 +7,7 @@ class Metrics:
     def __init__(self):
         self.floats: Dict[str, List[float]] = {}
         self.strings: Dict[str, List[str]] = {}
-        self.data: Dict[str, List] = {}
+        self.data: Dict[str, List[object]] = {}
 
     def reset(self) -> None:
         self.floats = {}
@@ -29,12 +29,10 @@ class Metrics:
 
         return string
 
-    def add(self, name: str, value: float | str | object) -> None:  # type: ignore
+    def add(self, name: str, value: float | str | object) -> None:
         if isinstance(value, float):
             self.floats.setdefault(name, []).append(value)
         elif isinstance(value, str):
             self.strings.setdefault(name, []).append(value)
         elif hasattr(value, '__str__'):
             self.data.setdefault(name, []).append(str(value))
-        else:
-            assert False, "Value must be float, str, or object with string method."

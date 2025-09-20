@@ -1,4 +1,4 @@
-from risk.game.map.map import Map
+from risk.game.map.world import World
 from risk.game.map.territory import Territory
 from risk.game.map.continent import Continent
 import pytest
@@ -8,5 +8,5 @@ import pytest
     ("territories", True),
     ("continents", True)
 ])
-def test_map_has_attrs_at_init(game_map: Map, attr: str, result: bool):
+def test_map_has_attrs_at_init(game_map: World, attr: str, result: bool):
     assert hasattr(game_map, attr) == result

@@ -1,33 +1,16 @@
+from typing import List
+from risk.game.base.player_base import PlayerBase
 
+class PlayerRandom(PlayerBase):
+    def __init__(self, name: str, id: int):
+        super().__init__(name, id)
 
-from risk.game.base.game_base import Action
-from risk.game.base.game_base import PlayerAbstract, EvaluationFunctionAbstract, StateAbstract
-
-
-class RandomFunction(EvaluationFunctionAbstract):
-    def evaluate(self, state: StateAbstract, player: PlayerAbstract) -> Action:
-        import numpy as np
-        actions = state.legal_actions()
-        if not actions:
-            raise ValueError("No legal actions available")
-        return np.random.choice(np.array(actions))
-
-    def __call__(self, state: StateAbstract, player: PlayerAbstract) -> Action:
-        return self.evaluate(state, player)
-
-
-class PlayerRandom(PlayerAbstract):
-    id: int
-    name: str
-    function: EvaluationFunctionAbstract
-
-    def __init__(self, id: int, name: str, function: EvaluationFunctionAbstract = RandomFunction()):
-        self.id = id
-        self.name = name
-        self.function = function
-
-    def reset(self, game_state: StateAbstract) -> None:
+    def reset(self) -> None:
         pass
 
-    def step(self, game_state: StateAbstract) -> Action:
-        return self.function(game_state, self)
+    def pick(self, legal_actions: List[int]) -> int:
+        import random
+        return random.choice(legal_actions)
+
+    def step(self, player: PlayerBase, action: int) -> None:
+        pass

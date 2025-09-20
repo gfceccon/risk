@@ -1,29 +1,23 @@
-from typing import List, Sequence
-from risk.game.base.game_base import PlayerAbstract, StateAbstract
-from risk.game.base.game_base import Action, Phase, Observation
-from risk.game.map.map import Map
-from risk.game.map.world import World
+from typing import Dict, List, Sequence
+from risk.game.base.game_base import PlayerBase, StateBase
+from risk.game.base.game_base import Phase
+from risk.game.base.map_base import MapBase
 
 
-class State(StateAbstract):
+class State(StateBase):
 
-    def __init__(self, players: List[PlayerAbstract], world: Map):
+    def __init__(self, players: List[PlayerBase], world: MapBase):
         super().__init__(players, world)
 
-    def reset(self, num_troops: int) -> None:
-        self.history = []
-        self.phase = Phase.INITIALIZATION
-        self.player_turn = self.players[0]
-        self.world.reset()
-        for player in self.players:
-            player.reset(self)
+    def reset(self) -> None:
+        super().reset()
         # TODO: Initialize the troops and territories for each player
 
-    def legal_actions(self) -> list[Action]:
+    def legal_actions(self) -> list[int]:
         # TODO: Return the list of legal actions for the current player
         raise NotImplementedError
 
-    def apply_action(self, action: Action) -> None:
+    def apply_action(self, action: int) -> None:
         # TODO: Apply the action to the game state
         raise NotImplementedError
 
@@ -31,7 +25,7 @@ class State(StateAbstract):
         # TODO: Determine if the game state is terminal
         raise NotImplementedError
 
-    def reward(self, player: PlayerAbstract) -> float:
+    def reward(self, player: PlayerBase) -> float:
         # TODO: Calculate the reward for the given player
         raise NotImplementedError
 
@@ -43,6 +37,6 @@ class State(StateAbstract):
         # TODO: Return a deep copy of the current state
         raise NotImplementedError
 
-    def observation_space(self, player: PlayerAbstract | None = None) -> Observation:
+    def observation_space(self, player: PlayerBase | None = None) -> Dict[str, object]:
         # TODO: Return the observation space for the given player
         raise NotImplementedError

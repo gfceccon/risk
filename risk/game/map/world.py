@@ -1,21 +1,23 @@
-from risk.game.map.map import Map
+from risk.game.base.map_base import MapBase
 from risk.game.map.continent import Continent
 from risk.game.map.territory import Territory
+from risk.game.base.config import default_config
 
-class World(Map):
+
+class World(MapBase):
     def __init__(self):
-        super().__init__()
+        super().__init__(config=default_config)
         self.continents = {
-            "north_america": self._create_na(),
-            "south_america": self._create_sa(),
-            "europe": self._create_europe(),
-            "africa": self._create_africa(),
-            "asia": self._create_asia(),
-            "australia": self._create_oceania(),
+            "north_america": self._create_na("north_america"),
+            "south_america": self._create_sa("south_america"),
+            "europe": self._create_europe("europe"),
+            "africa": self._create_africa("africa"),
+            "asia": self._create_asia("asia"),
+            "australia": self._create_oceania("australia"),
         }
         self._create_intercontinental_borders()
 
-    def _create_na(self) -> Continent:
+    def _create_na(self, short_name) -> Continent:
         # North America Territories
         self.alaska = Territory("Alaska", 1)
         self.alberta = Territory("Alberta", 2)
@@ -49,11 +51,14 @@ class World(Map):
 
         # North America Continent
         north_america = Continent(
-            "North America", [self.alaska, self.alberta, self.central_america, self.eastern_us, self.greenland,
-                              self.northwest_territory, self.ontario, self.quebec, self.western_us])
+            "North America",
+            [self.alaska, self.alberta, self.central_america, self.eastern_us,
+             self.greenland, self.northwest_territory, self.ontario,
+             self.quebec, self.western_us],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return north_america
 
-    def _create_sa(self) -> Continent:
+    def _create_sa(self, short_name) -> Continent:
         # South America Territories
         self.argentina = argentina = Territory("Argentina", 1)
         self.brazil = brazil = Territory("Brazil", 2)
@@ -71,10 +76,11 @@ class World(Map):
 
         # South America Continent
         south_america = Continent(
-            "South America", [argentina, brazil, venezuela, peru])
+            "South America", [argentina, brazil, venezuela, peru],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return south_america
 
-    def _create_europe(self) -> Continent:
+    def _create_europe(self, short_name) -> Continent:
         # Europe Territories
         self.great_britain = great_britain = Territory("Great Britain", 1)
         self.iceland = iceland = Territory("Iceland", 2)
@@ -103,10 +109,11 @@ class World(Map):
         # Europe Continent
         europe = Continent(
             "Europe", [great_britain, iceland, northern_europe, scandinavia,
-                       southern_europe, ukraine, western_europe])
+                       southern_europe, ukraine, western_europe],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return europe
 
-    def _create_africa(self) -> Continent:
+    def _create_africa(self, short_name) -> Continent:
         # Africa Territories
         self.congo = congo = Territory("Congo", 1)
         self.east_africa = east_africa = Territory("East Africa", 2)
@@ -126,10 +133,12 @@ class World(Map):
 
         # Africa Continent
         africa = Continent(
-            "Africa", [congo, east_africa, egypt, madagascar, north_africa, south_africa])
+            "Africa", [congo, east_africa, egypt,
+                       madagascar, north_africa, south_africa],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return africa
 
-    def _create_asia(self) -> Continent:
+    def _create_asia(self, short_name) -> Continent:
         # Asia Territories
         self.afghanistan = afghanistan = Territory("Afghanistan", 1)
         self.china = china = Territory("China", 2)
@@ -162,10 +171,11 @@ class World(Map):
         # Asia Continent
         asia = Continent(
             "Asia", [afghanistan, china, india, irkutsk, japan,
-                     kamchatka, middle_east, mongolia, siam, siberia, ural, yakutsk])
+                     kamchatka, middle_east, mongolia, siam, siberia, ural, yakutsk],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return asia
 
-    def _create_oceania(self) -> Continent:
+    def _create_oceania(self, short_name) -> Continent:
         # Australia Territories
         self.eastern_australia = eastern_australia = Territory(
             "Eastern Australia", 1)
@@ -184,7 +194,9 @@ class World(Map):
 
         # Australia Continent
         australia = Continent(
-            "Australia", [western_australia, new_guinea, indonesia, eastern_australia])
+            "Australia", [western_australia, new_guinea,
+                          indonesia, eastern_australia],
+            bonus_troops=self.config.CONTINENT_BONUSES.get(short_name, 0))
         return australia
 
     def _create_intercontinental_borders(self):
