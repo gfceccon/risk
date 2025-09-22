@@ -1,20 +1,18 @@
-from typing import Dict, List
-
 # TODO: Implement Metrics Collection and Reporting
 
 
 class Metrics:
     def __init__(self):
-        self.floats: Dict[str, List[float]] = {}
-        self.strings: Dict[str, List[str]] = {}
-        self.data: Dict[str, List[object]] = {}
+        self.floats: dict[str, list[float]] = {}
+        self.strings: dict[str, list[str]] = {}
+        self.data: dict[str, list[object]] = {}
 
     def reset(self) -> None:
         self.floats = {}
         self.strings = {}
         self.data = {}
 
-    def get(self, name: str) -> List:
+    def get(self, name: str) -> list:
         return self.data.get(name, [])
 
     def summary(self) -> str:

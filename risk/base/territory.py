@@ -1,11 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import List
 
 
 class TerritoryBase(ABC):
     name: str
     id: int
-    borders: List['BorderBase']
+    borders: list['BorderBase']
     num_units: int
     owner: int | None
 
@@ -24,7 +23,7 @@ class TerritoryBase(ABC):
             border.reset()
 
     @abstractmethod
-    def add_borders(self, neighbors: List['TerritoryBase']):
+    def add_border(self, neighbor: 'TerritoryBase') -> None:
         pass
 
     def __eq__(self, value: object) -> bool:
@@ -33,9 +32,9 @@ class TerritoryBase(ABC):
         return self.name == value.name and self.id == value.id
 
     def __str__(self) -> str:
-        result = f"{self.id}.{self.name}"
+        result = f"{self.id}.{self.name}\n"
         if self.borders:
-            result += f"({" | ".join([str(n) for n in self.borders])})"
+            result += f"---> {"\n---> ".join([f"{n.destination.name}" for n in self.borders])}"
         return result
 
     def __repr__(self) -> str:
@@ -54,4 +53,4 @@ class BorderBase(ABC):
         return f"{self.origin} -> {self.destination}"
 
     def __repr__(self) -> str:
-        return str(self)
+        return f"{self.origin} -> {self.destination}"

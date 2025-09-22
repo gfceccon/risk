@@ -1,14 +1,13 @@
 from abc import ABC
-from typing import List
 
-from risk.base.territory_base import TerritoryBase
+from risk.base.territory import TerritoryBase
 
 
 class ContinentBase(ABC):
     name: str
-    territories: List[TerritoryBase]
+    territories: list[TerritoryBase]
 
-    def __init__(self, name: str, territories: List[TerritoryBase], bonus: int = 0):
+    def __init__(self, name: str, territories: list[TerritoryBase], bonus: int = 0):
         self.name = name
         self.territories = territories
 
@@ -16,7 +15,7 @@ class ContinentBase(ABC):
         for territory in self.territories:
             territory.reset()
 
-    def add_territories(self, territories: List[TerritoryBase]) -> None:
+    def add_territories(self, territories: list[TerritoryBase]) -> None:
         self.territories.extend(territories)
 
     def get_territory_by_name(self, name: str) -> TerritoryBase | None:
@@ -30,10 +29,13 @@ class ContinentBase(ABC):
         return next(filtered_territories, None)
 
     def __str__(self) -> str:
-        return f"{self.name}({"|".join([str(t) for t in self.territories])})"
+        result = f"==== {self.name} ===\n"
+        if self.territories:
+            result += f"{"\n".join([str(t) for t in self.territories])}"
+        return result
 
     def __repr__(self) -> str:
-        return str(self)
+        return f"{self.name} {" ".join([t.name for t in self.territories])}"
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, ContinentBase):

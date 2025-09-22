@@ -1,6 +1,4 @@
-from typing import List
-from risk.base.territory_base import TerritoryBase
-from risk.map.border import Border
+from risk.base.territory import TerritoryBase, BorderBase
 
 
 class Territory(TerritoryBase):
@@ -13,7 +11,19 @@ class Territory(TerritoryBase):
         for border in self.borders:
             border.reset()
 
-    def add_borders(self, neighbors: List['TerritoryBase']):
-        for neighbor in neighbors:
-            if neighbor not in [b.destination for b in self.borders]:
-                self.borders.append(Border(self, neighbor))
+    def add_border(self, neighbor: 'TerritoryBase'):
+        if neighbor not in [b.destination for b in self.borders]:
+            self.borders.append(Border(self, neighbor))
+
+class Border(BorderBase):
+    def __init__(self, origin: TerritoryBase, destination: TerritoryBase):
+        super().__init__(origin, destination)
+
+    def reset(self) -> None:
+        pass
+
+    def __str__(self) -> str:
+        return f"{self.origin.name} -> {self.destination.name}"
+
+    def __repr__(self) -> str:
+        return str(self)

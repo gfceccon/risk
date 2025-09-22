@@ -1,6 +1,4 @@
-
-from typing import List
-from risk.base.player_base import PlayerBase
+from risk.base.player import PlayerBase
 
 
 class PlayerRandom(PlayerBase):
@@ -10,7 +8,7 @@ class PlayerRandom(PlayerBase):
     def reset(self) -> None:
         pass
 
-    def pick(self, legal_actions: List[int]) -> int:
+    def pick(self, legal_actions: list[int]) -> int:
         import random
         return random.choice(legal_actions)
 

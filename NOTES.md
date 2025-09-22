@@ -19,3 +19,8 @@
 - More allies borders, more capture incentive
 - More % of continent owned, more capture incentive
 - Objective cards, more capture incentive
+
+# Objective decision ideas
+- Kill weaker players can lead to better positions
+- Find best route to target territory
+- Find territories that are crucial to defend (e.g choke points)

@@ -1,4 +1,3 @@
-from typing import Dict
 import pyspiel
 
 _MAX_NUM_PLAYERS = 6
@@ -7,8 +6,7 @@ _NUM_TERRITORIES_WORLD = 42  # 42 territories on the board (world map)
 
 _NUM_ACTIONS_PER_TERRITORY = 3  # 0: no action, 1: attack, 2: fortify
 _NUM_ACTIONS_CARD = 3  # 0: no card action, 1: receive card, 2: trade in cards
-_DISTINCT_ACTIONS_BASE = (_MAX_NUM_PLAYERS *
-                          _NUM_ACTIONS_PER_TERRITORY * _NUM_ACTIONS_CARD)
+_DISTINCT_ACTIONS_BASE = (_MAX_NUM_PLAYERS * _NUM_ACTIONS_PER_TERRITORY * _NUM_ACTIONS_CARD)
 
 # Attackers can roll 1, 2, or 3 dice
 # Defenders can roll 1 or 2 dice
@@ -18,14 +16,14 @@ _MAX_OUTCOMES = 6  # 6 outcomes for dice rolls
 _MAX_GAME_LENGTH = 1_000_000  # Infinite turns, theoretically
 
 
-INITIAL_TROOPS: Dict[int, int] = {
+INITIAL_TROOPS: dict[int, int] = {
     3: 35,
     4: 30,
     5: 25,
     6: 20,
 }
 
-CONTINENT_BONUSES: Dict[str, int] = {
+CONTINENT_BONUSES: dict[str, int] = {
     "north_america": 1,
     "south_america": 1,
     "europe": 1,
@@ -56,9 +54,9 @@ _GAME_TYPE = pyspiel.GameType(
 )
 
 
-def _GAME_INFO(num_territories=_NUM_TERRITORIES_WORLD) -> pyspiel.GameInfo:
+def _GAME_INFO(_NUM_TERRITORIES, _NUM_BORDERS) -> pyspiel.GameInfo:
     return pyspiel.GameInfo(
-        num_distinct_actions=_DISTINCT_ACTIONS_BASE * num_territories,
+        num_distinct_actions=_DISTINCT_ACTIONS_BASE * _NUM_TERRITORIES * _NUM_BORDERS,
         max_chance_outcomes=_MAX_OUTCOMES,
         num_players=_MIN_NUM_PLAYERS,
         min_utility=-1,
