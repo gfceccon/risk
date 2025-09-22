@@ -1,5 +1,5 @@
 from risk.base.player import PlayerBase
-from risk.risk import RiskState
+from risk.game.risk import RiskState
 
 
 # TODO: Implement Reinforcement Learning Model

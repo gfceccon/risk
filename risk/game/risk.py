@@ -1,29 +1,40 @@
 from risk.base.config import _GAME_TYPE, _GAME_INFO
-from risk.base.game import PyspielGame, PyspielState, PyspielObserver
+from risk.base.spiel import PyspielGame, PyspielState, PyspielObserver
+from risk.game.deck import Deck
+from risk.map import Map, world_map
 import pyspiel
 
 
 class RiskGame(PyspielGame):
-    def __init__(self, params=None):
+    def __init__(self, params=None, map: Map = world_map):
         self.game_parameters = self.get_parameters()
+        self.map = map
         assert "num_territories" in self.game_parameters, "num_territories parameter is required"
         assert "num_borders" in self.game_parameters, "num_borders parameter is required"
-        
+
         super().__init__(_GAME_TYPE, _GAME_INFO(
-            self.game_parameters["num_territories"], self.game_parameters["num_borders"]),
+            self.game_parameters["num_territories"],
+            self.game_parameters["num_borders"]),
             params or {})
 
     def new_initial_state(self) -> PyspielState:
-        return RiskState(self)
+        return RiskState(self, self.map)
 
     def make_py_observer(self, iig_obs_type=None, params=None) -> 'PyspielObserver':
         return RiskObserver(iig_obs_type, params)
 
 
 class RiskState(PyspielState):
-    def __init__(self, game: PyspielGame):
+    deck: Deck
+
+    def __init__(self, game: PyspielGame, map: Map):
         super().__init__(game)
+        self.map = map
         # Initialize the state of the game here (e.g., territories, players, etc.)
+
+    def initialize(self) -> None:
+        # Set up the initial state of the game
+        return None
 
     def _legal_actions(self, player: int) -> list[int]:
         # Return a list of legal actions for the given player

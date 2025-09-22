@@ -1,27 +1,25 @@
-from risk.base.continent import ContinentBase
-from risk.base.territory import TerritoryBase
-from abc import ABC, abstractmethod
+import os
+from risk.map.continent import Continent
+from risk.map.territory import Territory
 import numpy as np
 
 
-class MapBase(ABC):
-    continents: dict[str, ContinentBase]
+class Map:
+    continents: dict[str, Continent]
 
     def __init__(self):
         self.continents = {}
 
-    @abstractmethod
     def reset(self) -> None:
         for continent in self.continents.values():
             continent.reset()
 
-    @abstractmethod
-    def add_borders(self, borders: list[tuple[TerritoryBase, TerritoryBase]]):
+    def add_borders(self, borders: list[tuple[Territory, Territory]]):
         for t1, t2 in borders:
             t1.add_border(t2)
 
     @classmethod
-    def to_matrix(cls, game_map: 'MapBase') -> np.ndarray:
+    def to_matrix(cls, game_map: 'Map') -> np.ndarray:
         self = game_map
         territory_list = [
             territory for continent in self.continents.values()
@@ -43,18 +41,17 @@ class MapBase(ABC):
         return np.array(matrix)
 
     @classmethod
-    def from_json(cls, file_name: str,
-                  continent_impl: type[ContinentBase],
-                  territory_impl: type[TerritoryBase]) -> 'MapBase':
+    def from_json(cls, file_name: str) -> 'Map':
         game_map = cls()
+        file_path = os.path.join(os.path.dirname(__file__), 'maps', file_name)
         import json
-        with open(file_name, 'r') as f:
+        with open(file_path, 'r') as f:
             data = json.load(f)
         for continent_data in data["continents"]:
-            continent = continent_impl(
+            continent = Continent(
                 name=continent_data["name"],
                 territories=[
-                    territory_impl(name=territory["name"], id=territory["id"])
+                    Territory(name=territory["name"], id=territory["id"])
                     for territory in continent_data["territories"]
                 ],
                 bonus=continent_data["bonus"]
@@ -80,17 +77,3 @@ class MapBase(ABC):
             result += f"{continent}\n"
         return result
 
-if __name__ == "__main__":
-    from risk.map.continent import Continent
-    from risk.map.territory import Territory
-
-    class TestMap(MapBase):
-        def reset(self) -> None:
-            super().reset()
-        def add_borders(self, borders: list[tuple[TerritoryBase, TerritoryBase]]):
-            super().add_borders(borders)
-
-    test_map = TestMap.from_json(
-        "world.json", Continent, Territory)
-    print("Successfully loaded map from JSON")
-    print(test_map)

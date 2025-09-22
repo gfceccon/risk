@@ -6,7 +6,8 @@ _NUM_TERRITORIES_WORLD = 42  # 42 territories on the board (world map)
 
 _NUM_ACTIONS_PER_TERRITORY = 3  # 0: no action, 1: attack, 2: fortify
 _NUM_ACTIONS_CARD = 3  # 0: no card action, 1: receive card, 2: trade in cards
-_DISTINCT_ACTIONS_BASE = (_MAX_NUM_PLAYERS * _NUM_ACTIONS_PER_TERRITORY * _NUM_ACTIONS_CARD)
+_DISTINCT_ACTIONS_BASE = (
+    _MAX_NUM_PLAYERS * _NUM_ACTIONS_PER_TERRITORY * _NUM_ACTIONS_CARD)
 
 # Attackers can roll 1, 2, or 3 dice
 # Defenders can roll 1 or 2 dice

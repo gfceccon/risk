@@ -1,7 +1,41 @@
-from risk.base.continent import ContinentBase
-from risk.base.territory import TerritoryBase
+from risk.map.territory import Territory
 
 
-class Continent(ContinentBase):
-    def __init__(self, name: str, territories: list[TerritoryBase], bonus: int):
-        super().__init__(name, territories, bonus)
+class Continent:
+    name: str
+    territories: list[Territory]
+
+    def __init__(self, name: str, territories: list[Territory], bonus: int = 0):
+        self.name = name
+        self.territories = territories
+
+    def reset(self) -> None:
+        for territory in self.territories:
+            territory.reset()
+
+    def add_territories(self, territories: list[Territory]) -> None:
+        self.territories.extend(territories)
+
+    def get_territory_by_name(self, name: str) -> Territory | None:
+        filtered_territories = filter(
+            lambda t: t.name == name, self.territories)
+        return next(filtered_territories, None)
+
+    def get_territory_by_number(self, number: int) -> Territory | None:
+        filtered_territories = filter(
+            lambda t: t.id == number, self.territories)
+        return next(filtered_territories, None)
+
+    def __str__(self) -> str:
+        result = f"==== {self.name} ===\n"
+        if self.territories:
+            result += f"{"\n".join([str(t) for t in self.territories])}"
+        return result
+
+    def __repr__(self) -> str:
+        return f"{self.name} {" ".join([t.name for t in self.territories])}"
+
+    def __eq__(self, value: object) -> bool:
+        if not isinstance(value, 'Continent'):
+            return False
+        return self.name == value.name and self.territories == value.territories
