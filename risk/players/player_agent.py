@@ -7,7 +7,8 @@ from risk.base.player import PlayerBase
 class PlayerRL(PlayerBase):
     model: RiskModel
 
-    def __init__(self, name: str, id: int, model: RiskModel):
+    def __init__(self, id: int, name: str, model: RiskModel):
+        super().__init__(id, name)
         self.model = model
 
     def reset(self) -> None:

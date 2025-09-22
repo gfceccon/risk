@@ -6,10 +6,7 @@ import pyspiel
 
 class PyspielGame(pyspiel.Game):
     def __init__(self, game_type: pyspiel.GameType, game_info: pyspiel.GameInfo, params=None):
-        self.game_parameters = self.get_parameters()
         super().__init__(game_type, game_info, params or {})
-        self.game_parameters = self.get_parameters()
-        self.params = params or {}
 
     @abstractmethod
     def new_initial_state(self) -> pyspiel.State:
@@ -22,6 +19,7 @@ class PyspielGame(pyspiel.Game):
 
 class PyspielState(pyspiel.State):
     def __init__(self, game: PyspielGame):
+        super().__init__(game)
         self.game = game
 
     @abstractmethod

@@ -1,39 +1,51 @@
-from risk.base.config import _GAME_TYPE, _GAME_INFO
+from risk.base.config import _GAME_TYPE, _GAME_INFO, GetGameInfo
 from risk.base.spiel import PyspielGame, PyspielState, PyspielObserver
+from risk.base.player import PlayerBase
 from risk.game.deck import Deck
-from risk.map import Map, world_map
+from risk.map import Map
 import pyspiel
 
 
 class RiskGame(PyspielGame):
-    def __init__(self, params=None, map: Map = world_map):
-        self.game_parameters = self.get_parameters()
-        self.map = map
-        assert "num_territories" in self.game_parameters, "num_territories parameter is required"
-        assert "num_borders" in self.game_parameters, "num_borders parameter is required"
-
-        super().__init__(_GAME_TYPE, _GAME_INFO(
-            self.game_parameters["num_territories"],
-            self.game_parameters["num_borders"]),
-            params or {})
+    def __init__(self, params):
+        super().__init__(_GAME_TYPE, GetGameInfo(Map.get_map_specs(params.get('map', 'world'))), params or {})
+        self.game_map = Map.get_map_by_name(params.get('map', 'world'))
 
     def new_initial_state(self) -> PyspielState:
-        return RiskState(self, self.map)
+        return RiskState(self, self.game_map)
 
     def make_py_observer(self, iig_obs_type=None, params=None) -> 'PyspielObserver':
         return RiskObserver(iig_obs_type, params)
 
 
 class RiskState(PyspielState):
+    game_map: Map
     deck: Deck
+    players: list[PlayerBase]
 
-    def __init__(self, game: PyspielGame, map: Map):
+    def __init__(self, game: PyspielGame, game_map: Map):
         super().__init__(game)
-        self.map = map
-        # Initialize the state of the game here (e.g., territories, players, etc.)
+        self.game_map = game_map
+        self.players = []
+        self.deck = Deck(game_map)
 
-    def initialize(self) -> None:
-        # Set up the initial state of the game
+    def initialize(self, players: list[type[PlayerBase]]) -> None:
+        for i, player_cls in enumerate(players):
+            player = player_cls(id=i, name=f"Player {player_cls.__name__} #{i+1}")
+            self.players.append(player)
+        self.deck.shuffle()
+        self.game_map.reset()
+
+        if len(players) == 2:
+            from risk.players import PlayerNoOp
+            self.players.append(PlayerNoOp(
+                id=2, name=f"Player {PlayerNoOp.__name__} #3"))
+            cards_size = len(self.deck.cards) // 3
+            for player in self.players:
+                for _ in range(cards_size):
+                    card = self.deck.draw()
+                    card.territory.owner = player.id
+
         return None
 
     def _legal_actions(self, player: int) -> list[int]:

@@ -1,22 +1,37 @@
 from dataclasses import dataclass
-from risk.map.territory import Territory
+from risk.map import Map, Territory
 
 
 @dataclass
 class Card:
     territory: Territory
+    type_name: str
     type: int
 
 
 class Deck:
     cards: list[Card]
     discarded: list[Card]
-    trade_count: int = 0
-    trade_values: list[int] = [4, 6, 8, 10, 12, 15]
+    card_types: list[str]
+    trade_bonus: list[int]
+    trade_count: int
 
-    def __init__(self, territories: list[Territory]):
-        self.cards = [Card(territory, i % 3)
-                      for i, territory in enumerate(territories)]
+    def __init__(self, map: Map):
+        self.cards = []
+        self.discarded = []
+        self.trade_count = 0
+        self.card_types = map.deck_card_types
+        self.trade_bonus = map.deck_army_bonus
+        territories = sorted([t for continent in map.continents
+                              for t in continent.territories],
+                             key=lambda x: x.id)
+        for i, territory in enumerate(territories):
+            type_idx = i % len(self.card_types)
+            self.cards.append(
+                Card(territory=territory,
+                     type_name=self.card_types[type_idx],
+                     type=type_idx)
+            )
         self.discarded = []
         self.shuffle()
 
@@ -33,13 +48,11 @@ class Deck:
         return self.cards.pop()
 
     def trade(self, cards: list[Card]) -> int:
-        if len(cards) != 3:
-            raise ValueError("Must trade exactly 3 cards")
         types = [card.type for card in cards]
-        if len(set(types)) == 1 or len(set(types)) == 3:
+        types_set = set(types)
+        if (len(types_set) == 1 or
+                len(types_set) == len(self.card_types)):
             for card in cards:
                 self.discarded.append(card)
-            return 1
-        else:
-            raise ValueError(
-                "Invalid trade: must be all same type or all different types")
+            return self.trade_bonus[min(self.trade_count, len(self.trade_bonus) - 1)]
+        return 0

@@ -7,9 +7,9 @@ Testing and documentation should be integrated throughout the development proces
 Features and components of the game.
 
 - [ ] Game State
-    - [ ] Territory
+    - [x] Territory
     - [ ] Army
-    - [ ] Graph Representation
+    - [x] Graph Representation
     - [ ] Cards *
         - [ ] Army Trading
     - [ ] Objectives

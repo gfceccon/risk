@@ -1,18 +1,20 @@
 
 
 class Territory:
-    name: str
     id: int
+    name: str
     borders: list['Border']
-    num_units: int
     owner: int | None
+    num_units: int
+    continent_id: int
 
-    def __init__(self, name: str, id: int):
+    def __init__(self, id: int, name: str, continent_id: int):
         self.id = id
         self.name = name
         self.borders = []
         self.owner = None
         self.num_units = 0
+        self.continent_id = continent_id
 
     def reset(self) -> None:
         self.owner = None

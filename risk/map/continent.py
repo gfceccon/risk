@@ -2,12 +2,23 @@ from risk.map.territory import Territory
 
 
 class Continent:
+    id: int
     name: str
+    bonus: int
     territories: list[Territory]
 
-    def __init__(self, name: str, territories: list[Territory], bonus: int = 0):
+    def __init__(self, id: int, name: str, territories: list[Territory], bonus: int = 0):
+        self.id = id
         self.name = name
+        self.bonus = bonus
         self.territories = territories
+
+    def get_bonus(self) -> int:
+        if all(t.owner is not None for t in self.territories):
+            owners = {t.owner for t in self.territories}
+            if len(owners) == 1:
+                return self.bonus
+        return 0
 
     def reset(self) -> None:
         for territory in self.territories:

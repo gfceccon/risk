@@ -1,9 +1,13 @@
-from risk import RiskGame
-from risk.map import world_map
 from risk.players import PlayerRandom
+import pyspiel
 
-def simulate(games: int = 1 ) -> None:
-    player1 = PlayerRandom("Alice", 1)
-    player2 = PlayerRandom("Bob", 2)
-    game = RiskGame([player1, player2], world_map)
+
+def simulate(games: int = 1) -> None:
+    game = pyspiel.load_game(
+        "risk_python", {
+            "players": 2,
+            "map": "three_territories"
+        })
+    state = game.new_initial_state()
+    state.initialize([PlayerRandom, PlayerRandom])
     print("Game over!")

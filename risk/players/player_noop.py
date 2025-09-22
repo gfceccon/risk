@@ -1,16 +1,15 @@
 from risk.base.player import PlayerBase
 
 
-class PlayerRandom(PlayerBase):
+class PlayerNoOp(PlayerBase):
     def __init__(self, id: int, name: str):
         super().__init__(id, name)
 
     def reset(self) -> None:
-        pass
+        return None
 
     def pick(self, legal_actions: list[int]) -> int:
-        import random
-        return random.choice(legal_actions)
+        return 0
 
-    def step(self, player: PlayerBase, action: int) -> None:
-        pass
+    def step(self, player: 'PlayerBase', action: int) -> None:
+        return None

@@ -1,0 +1,42 @@
+{
+    "continents": [
+        {
+            "name": "Continent #1",
+            "territories": [
+                {
+                    "id": 1,
+                    "name": "A",
+                    "borders": [
+                        "B"
+                    ]
+                },
+                {
+                    "id": 2,
+                    "name": "B",
+                    "borders": [
+                        "A", 
+                        "C"
+                    ]
+                }
+            ],
+            "bonus": 1
+        },
+        {
+            "name": "Continent #2",
+            "territories": [
+                {
+                    "id": 3,
+                    "name": "C",
+                    "borders": [
+                        "B"
+                    ]
+                }
+            ],
+            "bonus": 0
+        }
+    ],
+    "deck": {
+        "army_bonus": [1, 2],
+        "types": ["Infantry", "Cavalry", "Artillery"]
+    }
+}
